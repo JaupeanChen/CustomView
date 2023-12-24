@@ -54,7 +54,7 @@ class TagFlowLayout(context: Context, attributeSet: AttributeSet) :
                 child.measuredHeight + layoutParams.topMargin + layoutParams.bottomMargin
 
             //如果当前行的宽度加上当前子view的宽度超过父类给我们的推荐宽度widthSize，那么就需要换行了
-            if (lineWith + childWidth < widthSuggestSize) {
+            if (lineWith + childWidth < widthSuggestSize - paddingLeft - paddingRight) {
                 //不换行
                 lineWith += childWidth
                 lineHeight = Math.max(lineHeight, childHeight) //取最大行高
@@ -62,6 +62,8 @@ class TagFlowLayout(context: Context, attributeSet: AttributeSet) :
                 //换行
                 //记录上一行的数据
                 height += lineHeight
+                //行宽加上padding
+                lineWith += paddingLeft + paddingRight
                 width = Math.max(width, lineWith)
                 //重置行高行宽，开启新一行
                 lineHeight = childHeight
@@ -69,7 +71,8 @@ class TagFlowLayout(context: Context, attributeSet: AttributeSet) :
             }
             //因为我们前面是在换行时去累加上一行的数据，所以要在最后一个子view时累加当前行的数据
             if (i == childCount - 1) {
-                height += lineHeight
+                height += lineHeight + paddingTop + paddingBottom
+                lineWith += paddingLeft + paddingRight
                 width = Math.max(width, lineWith)
             }
         }
@@ -89,9 +92,9 @@ class TagFlowLayout(context: Context, attributeSet: AttributeSet) :
         //当前行行高
         var lineHeight = 0
         //当前left值
-        var curLeft = 0
+        var curLeft = paddingLeft
         //当前top值
-        var curTop = 0
+        var curTop = paddingTop
         for (i in 0 until childCount) {
             val child = getChildAt(i)
             //一样，先拿到子view的margin参数，然后加入计算
@@ -105,12 +108,12 @@ class TagFlowLayout(context: Context, attributeSet: AttributeSet) :
                 child.measuredHeight + layoutParams.topMargin + layoutParams.bottomMargin
 
             //当子view的测量宽度加上去超过我们本身的测量宽度的话，就需要换行
-            if (curLeft + childWidth < measuredWidth) {
+            if (curLeft + childWidth < measuredWidth - paddingRight) {
                 //不换行
                 lineHeight = Math.max(lineHeight, childHeight)
             } else {
                 //换行
-                curLeft = 0 //重置curLeft
+                curLeft = paddingLeft //重置curLeft
                 curTop += lineHeight //更新curTop
             }
 
@@ -118,8 +121,13 @@ class TagFlowLayout(context: Context, attributeSet: AttributeSet) :
             //val curT = curTop
             val curL = curLeft + layoutParams.leftMargin
             val curT = curTop + layoutParams.topMargin
-            val curR = curL + child.measuredWidth
+            var curR = curL + child.measuredWidth
             val curB = curT + child.measuredHeight
+
+            //单独处理占满整行的TAG
+            if (curR + paddingRight > measuredWidth) {
+                curR = measuredWidth - paddingRight
+            }
 
             child.layout(curL, curT, curR, curB)
             curLeft += childWidth
