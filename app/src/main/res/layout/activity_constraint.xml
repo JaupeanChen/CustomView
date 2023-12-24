@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ConstraintActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <Button
+        android:id="@+id/button_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="button_1"
+        app:layout_constraintStart_toStartOf="@id/guideline_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
+
+    <!-- 当宽高某一边设置为0dp时，是有设置了对应的两个约束，才能有铺满效果 -->
+    <Button
+        android:id="@+id/button_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="button_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline_vertical"
+        app:layout_constraintTop_toBottomOf="@id/button_1"
+        tools:ignore="HardcodedText" />
+
+    <!-- bias设置比例，设置比例的方向必须是约束与父布局 -->
+    <Button
+        android:id="@+id/button_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="button_bias"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25"
+        tools:ignore="HardcodedText" />
+
+    <!-- 控件宽高比Ratio -->
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="200dp"
+        android:layout_height="0dp"
+        android:src="@drawable/baby"
+        app:layout_constraintDimensionRatio="2:3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_3"
+        tools:ignore="ContentDescription" />
+
+    <!-- Chain链，给首节点设置链模式即可。首节点设置链属性，就相当于给整个链设置了链属性 -->
+    <Button
+        android:id="@+id/btn_chain_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="chain_1"
+        app:layout_constraintEnd_toStartOf="@id/btn_chain_2"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btn_chain_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="chain_2"
+        app:layout_constraintEnd_toStartOf="@id/btn_chain_3"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@id/btn_chain_1"
+        app:layout_constraintTop_toBottomOf="@id/iv"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btn_chain_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="chain_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@id/btn_chain_2"
+        app:layout_constraintTop_toBottomOf="@id/iv"
+        tools:ignore="HardcodedText" />
+    <!-- Chain链 -->
+
+    <!-- 通过圆角定位, B在以A为圆心，半径为90dp，135度处 -->
+    <Button
+        android:id="@+id/btn_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="被参照中心A"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_chain_1"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="圆角定位B"
+        app:layout_constraintCircle="@id/btn_center"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="90dp"
+        tools:ignore="HardcodedText" />
+    <!-- 通过圆角定位 -->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
